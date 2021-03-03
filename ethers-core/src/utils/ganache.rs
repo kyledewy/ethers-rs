@@ -10,7 +10,7 @@ use std::{
 };
 
 /// How long we will wait for ganache to indicate that it is ready.
-const GANACHE_STARTUP_TIMEOUT_MILLIS: u64 = 50_000;
+const GANACHE_STARTUP_TIMEOUT_MILLIS: u64 = 10_000;
 
 /// A ganache CLI instance. Will close the instance when dropped.
 ///
