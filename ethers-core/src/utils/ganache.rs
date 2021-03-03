@@ -10,7 +10,7 @@ use std::{
 };
 
 /// How long we will wait for ganache to indicate that it is ready.
-const GANACHE_STARTUP_TIMEOUT_MILLIS: u64 = 10_000;
+const GANACHE_STARTUP_TIMEOUT_MILLIS: u64 = 50_000;
 
 /// A ganache CLI instance. Will close the instance when dropped.
 ///
@@ -81,6 +81,7 @@ pub struct Ganache {
     port: Option<u16>,
     block_time: Option<u64>,
     mnemonic: Option<String>,
+    mainnet: Option<String>,
 }
 
 impl Ganache {
@@ -108,6 +109,12 @@ impl Ganache {
         self
     }
 
+    // Forks mainnet
+    pub fn fork_mainnet<T: Into<String>>(mut self, archive_node_url: T) -> Self {
+        self.mainnet = Some(archive_node_url.into());
+        self
+    }
+
     /// Consumes the builder and spawns `ganache-cli` with stdout redirected
     /// to /dev/null. This takes ~2 seconds to execute as it blocks while
     /// waiting for `ganache-cli` to launch.
@@ -120,6 +127,11 @@ impl Ganache {
             unused_port()
         };
         cmd.arg("-p").arg(port.to_string());
+
+        if let Some(mainnet) = self.mainnet {
+            cmd.arg("-f").arg(mainnet);
+            cmd.arg("-i").arg(969.to_string());
+        }
 
         if let Some(mnemonic) = self.mnemonic {
             cmd.arg("-m").arg(mnemonic);
