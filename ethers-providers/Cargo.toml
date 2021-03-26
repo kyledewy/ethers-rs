@@ -1,7 +1,7 @@
 [package]
 name = "ethers-providers"
 license = "MIT OR Apache-2.0"
-version = "0.2.0"
+version = "0.2.2"
 authors = ["Georgios Konstantopoulos <me@gakonst.com>"]
 edition = "2018"
 description = "Provider implementations for the ethers-rs crate"
@@ -14,12 +14,12 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-ethers-core = { version = "0.2", path = "../ethers-core", default-features = false }
+ethers-core = { version = "0.2.2", path = "../ethers-core", default-features = false }
 
 async-trait = { version = "0.1.42", default-features = false }
-hex = { version = "0.4.2", default-features = false, features = ["std"] }
-reqwest = { version = "0.11.1", default-features = false, features = ["json", "rustls-tls"] }
-serde = { version = "1.0.123", default-features = false, features = ["derive"] }
+hex = { version = "0.4.3", default-features = false, features = ["std"] }
+reqwest = { version = "0.11.2", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0.124", default-features = false, features = ["derive"] }
 serde_json = { version = "1.0.64", default-features = false }
 thiserror = { version = "1.0.24", default-features = false }
 url = { version = "2.2.1", default-features = false }
@@ -34,15 +34,15 @@ pin-project = { version = "1.0.5", default-features = false }
 
 # tracing
 tracing = { version = "0.1.25", default-features = false }
-tracing-futures = { version = "0.2.5", default-features = false }
+tracing-futures = { version = "0.2.5", default-features = false, features = ["std-future"] }
 
 # tokio
-tokio = { version = "1.2", default-features = false, optional = true }
+tokio = { version = "1.4", default-features = false, optional = true }
 tokio-tungstenite = { version = "0.13.0", default-features = false, features = ["connect", "tls"], optional = true }
 
 [dev-dependencies]
 ethers = { version = "0.2", path = "../ethers" }
-tokio = { version = "1.2", default-features = false, features = ["rt", "macros"] }
+tokio = { version = "1.4", default-features = false, features = ["rt", "macros"] }
 
 [features]
 default = ["ws"]

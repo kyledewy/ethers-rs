@@ -15,36 +15,30 @@ pub(crate) fn imports(name: &str) -> TokenStream {
         use std::sync::Arc;
         use ethers::{
             core::{
-                abi::{Abi, Token, Detokenize, InvalidOutputType, Tokenizable, parse_abi},
+                self as ethers_core,
+                abi::{Abi, Token, Detokenize, InvalidOutputType, Tokenizable},
                 types::*, // import all the types so that we can codegen for everything
             },
-            contract::{Contract, builders::{ContractCall, Event}, Lazy},
-            providers::Middleware,
+            contract::{self as ethers_contract, Contract, builders::{ContractCall, Event}, Lazy},
+            providers::{self as ethers_providers,Middleware},
         };
     }
 }
 
+/// Generates the static `Abi` constants and the contract struct
 pub(crate) fn struct_declaration(cx: &Context, abi_name: &proc_macro2::Ident) -> TokenStream {
     let name = &cx.contract_name;
     let abi = &cx.abi_str;
 
     let abi_parse = if !cx.human_readable {
         quote! {
-            pub static #abi_name: Lazy<Abi> = Lazy::new(|| serde_json::from_str(#abi)
+            pub static #abi_name: ethers_contract::Lazy<ethers_core::abi::Abi> = ethers_contract::Lazy::new(|| serde_json::from_str(#abi)
                                               .expect("invalid abi"));
         }
     } else {
         quote! {
-            pub static #abi_name: Lazy<Abi> = Lazy::new(|| {
-                let abi_str = #abi.replace('[', "").replace(']', "");
-                // split lines and get only the non-empty things
-                let split: Vec<&str> = abi_str
-                    .split("\n")
-                    .map(|x| x.trim())
-                    .filter(|x| !x.is_empty())
-                    .collect();
-                parse_abi(&split).expect("invalid abi")
-            });
+            pub static #abi_name: ethers_contract::Lazy<ethers_core::abi::Abi> = ethers_contract::Lazy::new(|| ethers::core::abi::parse_abi_str(#abi)
+                                                .expect("invalid abi"));
         }
     };
 
@@ -54,17 +48,17 @@ pub(crate) fn struct_declaration(cx: &Context, abi_name: &proc_macro2::Ident) ->
 
         // Struct declaration
         #[derive(Clone)]
-        pub struct #name<M>(Contract<M>);
+        pub struct #name<M>(ethers_contract::Contract<M>);
 
 
         // Deref to the inner contract in order to access more specific functions functions
         impl<M> std::ops::Deref for #name<M> {
-            type Target = Contract<M>;
+            type Target = ethers_contract::Contract<M>;
 
             fn deref(&self) -> &Self::Target { &self.0 }
         }
 
-        impl<M: Middleware> std::fmt::Debug for #name<M> {
+        impl<M: ethers_providers::Middleware> std::fmt::Debug for #name<M> {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 f.debug_tuple(stringify!(#name))
                     .field(&self.address())

@@ -1,7 +1,7 @@
 [package]
 name = "ethers-signers"
 license = "MIT OR Apache-2.0"
-version = "0.2.0"
+version = "0.2.2"
 authors = ["Georgios Konstantopoulos <me@gakonst.com>"]
 edition = "2018"
 description = "Signer implementations for the ethers-rs crate"
@@ -14,15 +14,14 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-ethers-core = { version = "0.2", path = "../ethers-core" }
+ethers-core = { version = "0.2.2", path = "../ethers-core" }
 thiserror = { version = "1.0.24", default-features = false }
-serde = { version = "1.0.123", default-features = false }
 
 coins-ledger = { version = "0.1.0", default-features = false, optional = true }
 eth-keystore = { version = "0.2.0" }
-hex = { version = "0.4.2", default-features = false, features = ["std"] }
+hex = { version = "0.4.3", default-features = false, features = ["std"] }
 async-trait = { version = "0.1.40", default-features = false }
-elliptic-curve = { version = "0.9.4", default-features = false }
+elliptic-curve = { version = "0.9.5", default-features = false }
 sha2 = { version = "0.9.3", default-features = false }
 rand = { version = "0.7.3", default-features = false }
 yubihsm = { version = "0.38.0", features = ["secp256k1", "http", "usb"], optional = true }
@@ -34,7 +33,7 @@ ethers = { version = "0.2", path = "../ethers" }
 yubihsm = { version = "0.38.0", features = ["secp256k1", "usb", "mockhsm"] }
 
 tempfile = "3.2.0"
-tokio = { version = "1.2", default-features = false, features = ["macros"] }
+tokio = { version = "1.4", default-features = false, features = ["macros"] }
 serde_json = { version = "1.0.64", default-features = false }
 
 [features]

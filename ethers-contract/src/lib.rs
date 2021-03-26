@@ -26,6 +26,10 @@ mod factory;
 pub use factory::ContractFactory;
 
 mod event;
+pub use event::EthEvent;
+
+mod log;
+pub use log::{decode_logs, EthLogDecode};
 
 mod stream;
 
@@ -46,7 +50,7 @@ pub use ethers_contract_abigen::Abigen;
 
 #[cfg(feature = "abigen")]
 #[cfg_attr(docsrs, doc(cfg(feature = "abigen")))]
-pub use ethers_contract_derive::abigen;
+pub use ethers_contract_derive::{abigen, EthAbiType, EthEvent};
 
 // Hide the Lazy re-export, it's just for convenience
 #[doc(hidden)]
